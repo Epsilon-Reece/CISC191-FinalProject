@@ -28,7 +28,7 @@ public class Game extends Canvas implements Runnable {
 	private boolean running = false;
 	private Thread thread; // 
 	private Menu menu; // start menu
-	//private Options options; //options menu from main menu
+	private Options options; //options menu from main menu
 	private Main main; // main game menu
 	
 	
@@ -37,7 +37,7 @@ public class Game extends Canvas implements Runnable {
 	public static enum STATE {  // create an enum list of game states. this list should grow since our game will be focused on different menus
 		MENU,
 		GAME, 
-		//OPTIONS,
+		OPTIONS,
 		MAIN
 	};
 	
@@ -51,11 +51,11 @@ public class Game extends Canvas implements Runnable {
 		
 		running = true;
 		thread = new Thread(this);	 // threading although only one thread
-		Thread gameTimerThread = new Thread(new GameTimer()); // GameTimer thread
+		//Thread gameTimerThread = new Thread(new GameTimer()); // GameTimer thread
 		thread.start();
-		gameTimerThread.start(); // gameTimerThread started
+		//gameTimerThread.start(); // gameTimerThread started
 		menu = new Menu(); // Initialize the menu
-		//options = new Options();
+		options = new Options();
 		main = new Main();
 		
 		this.addMouseListener(new MouseInput());
@@ -148,9 +148,9 @@ public class Game extends Canvas implements Runnable {
 			
 			menu.render(g); // render anything created in the menu class
 		
-		} //else if (State == STATE.OPTIONS) {
-			//options.render(g);
-		//}
+		} else if (State == STATE.OPTIONS) {
+			options.render(g);
+		}
 		
 
 		/////////////////////
