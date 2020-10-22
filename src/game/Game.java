@@ -1,5 +1,13 @@
 package game;
 
+
+/* For the Game timer thread I created the GameTimer class and under private synchronized void start() I started a new thread
+ * Thread gameTimerThread = new Thread(new GameTimer()); and the started the thread gameTimerThread.start();
+ * 
+ * to run this you should be able to import the files into an IDE and just run it. You will see the time print to the console
+ * along with the ticks per sec and the actual frame rate. You will see both threads running concurrently.
+
+*/
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -7,6 +15,9 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
+
+
+
 
 public class Game extends Canvas implements Runnable {
 	
@@ -20,6 +31,7 @@ public class Game extends Canvas implements Runnable {
 	private boolean running = false;
 	private Thread thread; // 
 	
+
 	private BufferedImage image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 	
 	private synchronized void start() {
@@ -29,8 +41,24 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		running = true;
+<<<<<<< Updated upstream
 		thread = new Thread(this);
 		thread.start();
+=======
+		thread = new Thread(this);	 // threading although only one thread
+		//Thread gameTimerThread = new Thread(new GameTimer()); // GameTimer thread
+		thread.start();
+		//gameTimerThread.start(); // gameTimerThread started
+		menu = new Menu(); // Initialize the menu
+		options = new Options();
+		main = new Main();
+		
+		this.addMouseListener(new MouseInput());
+		
+
+		
+		
+>>>>>>> Stashed changes
 	}
 	
 	private synchronized void stop() {
@@ -49,7 +77,6 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		System.exit(1);
-		
 	}
 		
 	public void run() {
@@ -67,7 +94,7 @@ public class Game extends Canvas implements Runnable {
 			// game loop
 
 	long now = System.nanoTime();
-			delta += (now -lastTime) / ns;
+			delta += (now - lastTime) / ns;
 			lastTime = now;
 			if (delta >+ 1) {
 				tick();
@@ -90,6 +117,13 @@ public class Game extends Canvas implements Runnable {
 	
 	private void tick() {
 		// updates game per frame
+<<<<<<< Updated upstream
+=======
+		if (State == STATE.GAME) {
+			
+		}
+
+>>>>>>> Stashed changes
 	}
 	
 	private void render() {
@@ -109,9 +143,25 @@ public class Game extends Canvas implements Runnable {
 		
 		
 		
+<<<<<<< Updated upstream
+=======
+		if (State == STATE.MAIN) {
+		
+
+			main.render(g);
+
+			
+		} else if (State == STATE.MENU) {
+			
+			menu.render(g); // render anything created in the menu class
+>>>>>>> Stashed changes
 		
 		
+<<<<<<< Updated upstream
 		
+=======
+
+>>>>>>> Stashed changes
 		/////////////////////
 		
 		g.dispose();
@@ -119,7 +169,9 @@ public class Game extends Canvas implements Runnable {
 		
 	}
 	
-	public static void main(String args[]) {  // main method
+
+
+	public static void main(String[] args) {  // main method
 		
 		Game game = new Game();
 		
@@ -135,7 +187,10 @@ public class Game extends Canvas implements Runnable {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
+
+		
 		game.start(); // call the game loop
 		
+
 	}
 }
