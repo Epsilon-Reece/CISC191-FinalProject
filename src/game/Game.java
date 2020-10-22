@@ -1,5 +1,13 @@
 package game;
 
+
+/* For the Game timer thread I created the GameTimer class and under private synchronized void start() I started a new thread
+ * Thread gameTimerThread = new Thread(new GameTimer()); and the started the thread gameTimerThread.start();
+ * 
+ * to run this you should be able to import the files into an IDE and just run it. You will see the time print to the console
+ * along with the ticks per sec and the actual frame rate. You will see both threads running concurrently.
+
+*/
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,24 +21,44 @@ public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	public static final int WIDTH = 640; // width of window
-	public static final int HEIGHT = WIDTH / 12 * 9; // height of window as a ratio of the width
+	public static final int HEIGHT = WIDTH / 12 * 9; // height of window as a ratio of the width   1280px /960px
 	public static final int SCALE = 2;
 	public final String TITLE = "RPG Project"; // text at the top left of the window
 	
 	private boolean running = false;
 	private Thread thread; // 
+	private Menu menu; // start menu
+	//private Options options; //options menu from main menu
+	private Main main; // main game menu
+	
 	
 	private BufferedImage image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 	
+	public static enum STATE {  // create an enum list of game states. this list should grow since our game will be focused on different menus
+		MENU,
+		GAME, 
+		//OPTIONS,
+		MAIN
+	};
+	
+	public static STATE State = STATE.MENU;  // can change the initial state of game
+	
+
 	private synchronized void start() {
 		if(running) {
-			return;
-			
+			return;	
 		}
 		
 		running = true;
-		thread = new Thread(this);
+		thread = new Thread(this);	 // threading although only one thread
+		Thread gameTimerThread = new Thread(new GameTimer()); // GameTimer thread
 		thread.start();
+		gameTimerThread.start(); // gameTimerThread started
+		menu = new Menu(); // Initialize the menu
+		//options = new Options();
+		main = new Main();
+		
+		this.addMouseListener(new MouseInput());
 	}
 	
 	private synchronized void stop() {
@@ -49,7 +77,6 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		System.exit(1);
-		
 	}
 		
 	public void run() {
@@ -67,7 +94,7 @@ public class Game extends Canvas implements Runnable {
 			// game loop
 
 	long now = System.nanoTime();
-			delta += (now -lastTime) / ns;
+			delta += (now - lastTime) / ns;
 			lastTime = now;
 			if (delta >+ 1) {
 				tick();
@@ -90,6 +117,10 @@ public class Game extends Canvas implements Runnable {
 	
 	private void tick() {
 		// updates game per frame
+		if (State == STATE.GAME) {
+			
+		}
+		
 	}
 	
 	private void render() {
@@ -105,13 +136,23 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics(); // draws graphics to canvas
 		
 		/////////////////////
-		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 		
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), this); //keeps the black background regardless of game state
 		
+		if (State == STATE.MAIN) {
+			
+			//g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+			main.render(g);
+			
+		} else if (State == STATE.MENU) {
+			
+			menu.render(g); // render anything created in the menu class
 		
+		} //else if (State == STATE.OPTIONS) {
+			//options.render(g);
+		//}
 		
-		
-		
+
 		/////////////////////
 		
 		g.dispose();
